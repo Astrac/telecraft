@@ -1,0 +1,12 @@
+name: Telecraft
+version: 0.0.1
+author: Aldo Stracquadanio
+main: org.astrac.telecraft
+website: http://github.com/Astrac/telecraft.git
+commands:
+    tc-status:
+        description: Tells you whether or not telecraft reporting is enabled for the current user
+    tc-private:
+        description: Disable telecraft for the current session of the current user
+    tc-toggle:
+        description: Enable/Disable telecraft for the current user
