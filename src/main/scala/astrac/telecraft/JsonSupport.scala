@@ -7,6 +7,7 @@ import play.api.libs.functional.syntax._
 import shapeless.tag
 import tag._
 
+// TODO: Use auto-generation whenever possible!
 trait JsonSupport {
   import DataId._
 
@@ -77,6 +78,18 @@ trait JsonSupport {
     (__ \ "chat").read[Chat] and
     (__ \ "text").readNullable[String]
   )(Message.apply _)
+
+  implicit val sendMessageWrites: Writes[SendMessage] = (
+    (__ \ "chat_id").write[ChatId] and
+    (__ \ "text").write[String] and
+    (__ \ "parse_mode").writeNullable[String] and
+    (__ \ "disable_web_page_preview").writeNullable[Boolean] and
+    (__ \ "reply_to_message_id").writeNullable[Long] and
+    (__ \ "reply_markup").writeNullable[ReplyMarkup]
+  )(unlift(SendMessage.unapply _))
+
+  // TODO: Writes for all commands, e.g.
+  // implicit val getMeWrites: Writes[GetMe.type] = ???
 }
 
 object JsonSupport extends JsonSupport

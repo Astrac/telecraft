@@ -2,15 +2,25 @@ package astrac.telecraft.model
 
 import DataId._
 
-sealed trait Command[R]
+trait Cmd[Req, Resp] {
+  def uri: String
+}
 
-case object GetMe extends Command[User]
+sealed trait Command
+
+object Command {
+  implicit val sendMessageIsCommand: Cmd[SendMessage, Message] = new Cmd[SendMessage, Message] { val uri = "sendMessage" }
+  // TODO: Add typeclass instances for all commands
+  // implicit val getMeIsCommand: Cmd[GetMe.type, User] = ???
+}
+
+case object GetMe extends Command
 
 case class SendMessage(
   chatId: ChatId,
-  message: String,
+  text: String,
   parseMode: Option[String] = None,
   disableWebPagePreview: Option[Boolean] = None,
   replyToMessageId: Option[Long] = None,
   replyMarkup: Option[ReplyMarkup] = None
-) extends Command[Message]
+) extends Command
