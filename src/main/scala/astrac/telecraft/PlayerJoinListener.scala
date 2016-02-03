@@ -4,10 +4,10 @@ import JsonSupport._
 import akka.stream.Materializer
 import java.util.logging.{Level, Logger}
 import model.DataId._
-import model.SendMessage
+import model.{Message, Response, SendMessage}
 import org.bukkit.event.{EventHandler, Listener}
-import org.bukkit.event.player.PlayerJoinEvent
-import scala.concurrent.ExecutionContext
+import org.bukkit.event.player.{PlayerJoinEvent, PlayerQuitEvent, PlayerEvent}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 class PlayerJoinListener(
@@ -16,15 +16,18 @@ class PlayerJoinListener(
     logger: Logger
 )(implicit ec: ExecutionContext) extends Listener {
 
+  def execute(cmd: SendMessage): Unit = chat.send(cmd).onComplete {
+    case Success(messageSent) => logger.log(Level.INFO, s"Sent message to chat ${chatId}: ${messageSent}")
+    case Failure(ex) => logger.log(Level.WARNING, s"Cannot send message to telegram chat: ${ex.getMessage}", ex)
+  }
+
   @EventHandler
   def onPlayerJoin(event: PlayerJoinEvent): Unit = {
-    val cmd = SendMessage(chatId, s"${event.getPlayer.getName} has just logged in")
+    execute(SendMessage(chatId, s"${event.getPlayer.getName} has just logged in"))
+  }
 
-    logger.log(Level.INFO, s"Player joined: $event.getPlayer.getName - sending cmd: $cmd")
-
-    chat.send(cmd).onComplete {
-      case Success(messageSent) => logger.log(Level.INFO, s"Sent joinMessage for user ${event.getPlayer.getName} - $messageSent")
-      case Failure(ex) => logger.log(Level.WARNING, s"Cannot send message to telegram chat: ${ex.getMessage}", ex)
-    }
+  @EventHandler
+  def onPlayerQuit(event: PlayerQuitEvent): Unit = {
+    execute(SendMessage(chatId, s"${event.getPlayer.getName} has just logged out"))
   }
 }
