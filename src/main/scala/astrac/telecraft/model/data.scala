@@ -150,11 +150,12 @@ case class Chat(
 )
 
 sealed trait ChatType { def text: String }
-object ChatType {
-  case object Supergroup extends ChatType { val text = "supergroup" }
-  case object Channel extends ChatType { val text = "channel" }
-  case object Group extends ChatType { val text = "group" }
-  case object Private extends ChatType { val text = "private" }
 
+case object Supergroup extends ChatType { val text = "supergroup" }
+case object Channel extends ChatType { val text = "channel" }
+case object Group extends ChatType { val text = "group" }
+case object Private extends ChatType { val text = "private" }
+
+object ChatType {
   val fromString: Map[String, ChatType] = Seq(Supergroup, Channel, Group, Private).map(t => (t.text, t)).toMap
 }
