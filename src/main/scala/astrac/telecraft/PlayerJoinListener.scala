@@ -3,6 +3,7 @@ package astrac.telecraft
 import JsonSupport._
 import akka.stream.Materializer
 import java.util.logging.{Level, Logger}
+import io.circe.generic.auto._
 import model.DataId._
 import model.{Message, Response, SendMessage}
 import org.bukkit.event.{EventHandler, Listener}
