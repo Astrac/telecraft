@@ -4,7 +4,7 @@ A plugin for the Spigot minecraft server that interfaces with a Telegram bot. In
 
 ## Installation ##
 
-You can build Telecraft using sbt and the assembly plugin (already included in the project configuration). Install sbt if you don't have it and from the root folder of the proejct run:
+You can build Telecraft using sbt and the [assembly plugin](https://github.com/sbt/sbt-assembly) (already included in the project configuration). Install sbt if you don't have it and from the root folder of the proejct run:
 
     sbt assembly
 
